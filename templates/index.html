@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lungs Cancer Prediction | V1.0</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/logo.png" />
+    <style>
+      /* CSS styles */
+
+      /* Common styles for both desktop and mobile */
+      body {
+        font-family: Arial, sans-serif;
+        background-image: url("/static/images/LungsBG.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        margin: 0;
+        padding: 0;
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(
+          255,
+          255,
+          255,
+          0.562
+        ); /* Warna overlay dan transparansi */
+        backdrop-filter: blur(2px); /* Efek blur pada overlay */
+        z-index: -1;
+      }
+
+      .header {
+        position: fixed; /* Ubah posisi menjadi fixed agar tetap terlihat saat discroll */
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: #2a3457;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: background-color 0.3s ease; /* Tambahkan transisi untuk efek smooth */
+        z-index: 2; /* Atur z-index lebih tinggi agar tampil di atas konten */
+      }
+      .title-container {
+        display: flex;
+        flex-direction: column;
+        align-items: baseline;
+        margin-right: auto;
+      }
+
+      .title {
+        color: #fff;
+        font-size: 24px;
+        margin-left: 0;
+        margin-bottom: 0;
+        padding-top: 10px;
+      }
+
+      .description {
+        color: #fff;
+        font-size: 18px;
+        margin-left: 0;
+        margin-block-start: initial;
+      }
+      .footer {
+        background-color: #a1b3ff;
+        padding: 20px;
+        position: fixed;
+        bottom: 0; /* Mengatur posisi footer selalu di bagian bawah layar */
+        left: 0;
+        width: 100%; /* Agar footer menutupi seluruh lebar layar */
+        color: #0b0000;
+        text-align: center;
+        font-size: 17px;
+      }
+      .logo {
+        max-width: 100px;
+        height: auto;
+        padding-left: 12px;
+      }
+      .logo-container {
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Mengatur logo berdampingan secara horizontal */
+        margin-bottom: 20px;
+        flex-wrap: wrap; /* Mengatur agar logo-wrap ke baris baru jika melebihi lebar container */
+      }
+
+      .logo-container img {
+        max-width: 100px; /* Sesuaikan ukuran logo sesuai kebutuhan */
+        height: auto;
+        margin-right: 10px; /* Atur jarak antara logo-logo */
+      }
+      .title {
+        color: #fff;
+        font-size: 24px;
+        margin-left: 10px; /* Posisikan h2 ke kiri dengan margin */
+        flex-grow: 1; /* Mengatur agar h2 menempati ruang yang tersedia */
+      }
+      .container {
+        display: block;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+        height: 100vh;
+        max-width: 800px;
+        margin: 248px auto;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: left;
+        color: #333;
+        margin-bottom: 5px;
+      }
+
+      .form-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+      }
+
+      .form-input {
+        margin-bottom: 15px;
+        padding: 5px;
+        width: 100%;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      .form-button {
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .form-button:hover {
+        background-color: #45a049;
+      }
+      /* Untuk browser berbasis WebKit (Chrome, Safari) */
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      /* Untuk Firefox */
+      input[type="number"]::-moz-number-spinners {
+        display: none;
+      }
+
+      .back-button {
+        background-color: #5cb0ff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-top: 10px;
+        display: inline-block;
+        cursor: pointer;
+      }
+
+      .back-button:hover {
+        background-color: #3898e7;
+      }
+
+      /* Styles for desktop */
+      @media only screen and (min-width: 768px) {
+        h1 {
+          font-size: 30px;
+          margin-bottom: 5px;
+        }
+        .form-input {
+          margin-bottom: 15px;
+          padding: 5px;
+          width: 100%;
+          font-size: 16px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+        }
+        .form-label,
+        .form-input {
+          font-size: 40px;
+        }
+
+        .form-button,
+        .back-button {
+          font-size: 25px;
+        }
+
+        .form-container {
+          display: block;
+          grid-template-columns: repeat(2, 1fr);
+          grid-gap: 10px;
+        }
+
+        .p {
+          font-size: medium;
+          margin-bottom: 5px;
+        }
+      }
+
+      /* Styles for mobile */
+      @media only screen and (max-width: 767px) {
+        h1 {
+          font-size: 24px;
+          margin-bottom: 5px;
+        }
+
+        .form-label,
+        .form-input {
+          font-size: 10px;
+        }
+
+        .form-button,
+        .back-button {
+          font-size: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body style="overflow: hidden">
+    <div class="header">
+      <img src="/static/images/logo.png" alt="Logo" class="logo" />
+      <div class="title-container">
+        <h2 class="title">ParuPredict</h2>
+        <p class="description">Deteksi Lebih Dini, Hidup Lebih Pasti</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>PREDIKSI RESIKO PENYAKIT KANKER PARU-PARU</h1>
+      <p>Silakan isi informasi berikut untuk mendapatkan hasil diagnosa:</p>
+      <form id="prediction-form" action="/results" method="POST">
+        <div class="form-container">
+          <div id="question-1">
+            <label for="age" class="form-label">Usia:</label>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="age"
+              id="age"
+              class="form-input"
+              min="0"
+              max="100"
+              required
+              autocomplete="off"
+            />
+            <button type="button" onclick="showQuestion(2)" class="form-button">
+              Next
+            </button>
+          </div>
+
+          <div id="question-2" style="display: none">
+            <label for="gender" class="form-label">Jenis Kelamin:</label>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <select
+              name="gender"
+              id="gender"
+              class="form-input"
+              required
+              autocomplete="off"
+            >
+              <option value="" disabled>Pilih Jenis Kelamin</option>
+              <option value="male" selected>Laki-Laki</option>
+              <option value="female">Perempuan</option>
+            </select>
+            <button
+              type="button"
+              onclick="showQuestion(1)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button type="button" onclick="showQuestion(3)" class="form-button">
+              Next
+            </button>
+          </div>
+
+          <div id="question-3" style="display: none">
+            <label for="air_pollution" class="form-label"
+              >Tingkat Polusi Udara:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="air_pollution"
+              id="air_pollution"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(2)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button type="button" onclick="showQuestion(4)" class="form-button">
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 4 -->
+          <div id="question-4" style="display: none">
+            <label for="alcohol_use" class="form-label">
+              Tingkat Penggunaan Alkohol:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="alcohol_use"
+              id="alcohol_use"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(3)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button type="button" onclick="showQuestion(5)" class="form-button">
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 5 -->
+          <div id="question-5" style="display: none">
+            <label for="dust_allergy" class="form-label"
+              >Tingkat Alergi Debu:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="dust_allergy"
+              id="dust_allergy"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(4)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button type="button" onclick="showQuestion(6)" class="form-button">
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 6 -->
+          <div id="question-6" style="display: none">
+            <label for="occupational_hazards" class="form-label"
+              >Tingkat Bahaya di Tempat Kerja:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="occupational_hazards"
+              id="occupational_hazards"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(5)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button type="button" onclick="showQuestion(7)" class="form-button">
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 7 -->
+          <div id="question-7" style="display: none">
+            <label for="genetic_risk" class="form-label"
+              >Tingkat Resiko Genetik:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="genetic_risk"
+              id="genetic_risk"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(6)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button type="button" onclick="showQuestion(8)" class="form-button">
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 8 -->
+          <div id="question-8" style="display: none">
+            <label for="chronic_lung_disease" class="form-label"
+              >Tingkat Riwayat Penyakit Paru-Paru:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="chronic_lung_disease"
+              id="chronic_lung_disease"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(7)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button type="button" onclick="showQuestion(9)" class="form-button">
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 9 -->
+          <div id="question-9" style="display: none">
+            <label for="balanced_diet" class="form-label"
+              >Tingkat Pola Makan Yang Seimbang:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="balanced_diet"
+              id="balanced_diet"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(8)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onclick="showQuestion(10)"
+              class="form-button"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 10 -->
+          <div id="question-10" style="display: none">
+            <label for="obesity" class="form-label">Tingkat Obesitas:</label>
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="obesity"
+              id="obesity"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(9)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onclick="showQuestion(11)"
+              class="form-button"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 11 -->
+          <div id="question-11" style="display: none">
+            <label for="smoking" class="form-label"
+              >Tingkat Kebiasaan Merokok:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="smoking"
+              id="smoking"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(10)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onclick="showQuestion(12)"
+              class="form-button"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 12 -->
+          <div id="question-12" style="display: none">
+            <label for="passive_smoker" class="form-label"
+              >Tingkat Paparan Terhadap Asap Rokok:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="passive_smoker"
+              id="passive_smoker"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(11)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onclick="showQuestion(13)"
+              class="form-button"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 13 -->
+          <div id="question-13" style="display: none">
+            <label for="chest_pain" class="form-label"
+              >Tingkat Frekuensi Nyeri Dada:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="chest_pain"
+              id="chest_pain"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(12)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onclick="showQuestion(14)"
+              class="form-button"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 14 -->
+          <div id="question-14" style="display: none">
+            <label for="coughing_blood" class="form-label"
+              >Tingkat Intesitas Batuk Darah:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="coughing_blood"
+              id="coughing_blood"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(13)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onclick="showQuestion(15)"
+              class="form-button"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 15 -->
+          <div id="question-15" style="display: none">
+            <label for="fatigue" class="form-label">Tingkat Kelelahan:</label>
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="fatigue"
+              id="fatigue"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(14)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onclick="showQuestion(16)"
+              class="form-button"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 16 -->
+          <div id="question-16" style="display: none">
+            <label for="weight_loss" class="form-label"
+              >Tingkat Penurunan Berat Badan:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="weight_loss"
+              id="weight_loss"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(15)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onclick="showQuestion(17)"
+              class="form-button"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 17 -->
+          <div id="question-17" style="display: none">
+            <label for="shortness_of_breath" class="form-label"
+              >Tingkat Frekuensi Sesak Nafas:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="shortness_of_breath"
+              id="shortness_of_breath"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(16)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onclick="showQuestion(18)"
+              class="form-button"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 18 -->
+          <div id="question-18" style="display: none">
+            <label for="wheezing" class="form-label"
+              >Tingkat Mengi(suara siulan bernada tinggi saat bernafas):</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="wheezing"
+              id="wheezing"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(17)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onclick="showQuestion(19)"
+              class="form-button"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 19 -->
+          <div id="question-19" style="display: none">
+            <label for="swallowing_difficulty" class="form-label"
+              >Tingkat Kesulitan Menelan:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="swallowing_difficulty"
+              id="swallowing_difficulty"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(18)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onclick="showQuestion(20)"
+              class="form-button"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 20 -->
+          <div id="question-20" style="display: none">
+            <label for="clubbing" class="form-label"
+              >Tingkat Perubahan Pada Kuku Jari(Clubbing Finger):</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="clubbing"
+              id="clubbing"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(19)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onclick="showQuestion(21)"
+              class="form-button"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 21 -->
+          <div id="question-21" style="display: none">
+            <label for="frequent_cold" class="form-label"
+              >Tingkat Frekuensi Sering Masuk Angin:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="frequent_cold"
+              id="frequent_cold"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(20)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onclick="showQuestion(22)"
+              class="form-button"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 22 -->
+          <div id="question-22" style="display: none">
+            <label for="dry_cough" class="form-label"
+              >Tingkat Fekuensi Sering Batuk Kering:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="dry_cough"
+              id="dry_cough"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(21)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              onclick="showQuestion(23)"
+              class="form-button"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- Pertanyaan 23 -->
+          <div id="question-23" style="display: none">
+            <label for="snoring" class="form-label"
+              >Tingkat Kebiasaaan Mendengkur:</label
+            >
+            <p>Isi dengan nilai skala dari 1 (terendah) hingga 9 (tertinggi)</p>
+            <p class="warning" style="color: red; display: none">
+              Harap isi semua input sebelum melanjutkan.
+            </p>
+            <input
+              type="number"
+              name="snoring"
+              id="snoring"
+              class="form-input"
+              min="1"
+              max="9"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="showQuestion(22)"
+              class="form-button previous-button"
+            >
+              Previous
+            </button>
+            <button type="submit" class="form-button">Prediksi</button>
+          </div>
+        </div>
+        <a href="/" class="back-button">Beranda</a>
+      </form>
+    </div>
+    <div class="footer">&copy; 2024 LungCare - All rights reserved</div>
+    <script>
+      // JavaScript function to show/hide questions
+      function showQuestion(questionNumber) {
+        var questions = document.querySelectorAll(".form-container > div");
+        var currentQuestion = questions[questionNumber - 1];
+        var previousQuestion = questions[questionNumber - 2];
+
+        // Validasi input pada pertanyaan sebelumnya jika ada
+        if (previousQuestion) {
+          var inputs = previousQuestion.querySelectorAll(
+            'input[type="number"]'
+          );
+          var filled = true;
+
+          // Memeriksa apakah semua input pada pertanyaan sebelumnya telah diisi
+          inputs.forEach(function (input) {
+            if (input.value.trim() === "") {
+              filled = false;
+            }
+          });
+
+          // Hanya lanjutkan jika semua input telah diisi
+          if (!filled) {
+            var warning = previousQuestion.querySelector(".warning");
+            if (warning) {
+              warning.style.display = "block";
+            }
+            return;
+          }
+        }
+
+        // Menyembunyikan pesan peringatan jika ada
+        var currentWarning = currentQuestion.querySelector(".warning");
+        if (currentWarning) {
+          currentWarning.style.display = "none";
+        }
+
+        // Menampilkan pertanyaan berikutnya dan menyembunyikan yang sebelumnya
+        questions.forEach(function (question, index) {
+          if (index === questionNumber - 1) {
+            question.style.display = "block";
+          } else {
+            question.style.display = "none";
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
