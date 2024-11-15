@@ -1012,19 +1012,29 @@
             'input[type="number"]'
           );
           var filled = true;
+          var validRange = true;
 
           // Memeriksa apakah semua input pada pertanyaan sebelumnya telah diisi
           inputs.forEach(function (input) {
             if (input.value.trim() === "") {
               filled = false;
             }
+            if (input.name !== "age" && input.name !== "gender") {
+              var value = parseInt(input.value);
+              if (value < 1 || value > 9) {
+                validRange = false;
+              }
+            }
           });
 
           // Hanya lanjutkan jika semua input telah diisi
-          if (!filled) {
+          if (!filled || !validRange) {
             var warning = previousQuestion.querySelector(".warning");
             if (warning) {
               warning.style.display = "block";
+              warning.textContent = !filled
+                ? "Harap isi semua input sebelum melanjutkan."
+                : "Harap isi dengan nilai antara 1 hingga 9.";
             }
             return;
           }
