@@ -4,6 +4,14 @@ Sistem ini menggunakan model algoritma Artificial Neural Network (ANN) berbasis 
 
 ## Screenshots
 
+## Halaman Utama
+
+![Halaman Utama](Halaman_Dashboard.png)
+
+| Halaman Input                            | Halaman Hasil Prediksi                                       |
+| ---------------------------------------- | ------------------------------------------------------------ |
+| ![Halaman Input](Halaman_Form_Input.png) | ![Ketiga Kategori Hail Prediksi](Halaman_Hasil_Prediksi.png) |
+
 ## Usage
 
 1. Clone this repository to your local machine.
