@@ -36,3 +36,7 @@ python app.py
 7. Access the application through your web browser at http://localhost:5000.
 8. Fill in the form with the required information.
 9. Click the "Prediksi" button to get the predicted outcome.
+
+## Lisensi
+
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).
